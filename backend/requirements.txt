@@ -1,0 +1,21 @@
+# Django & REST Framework
+Django>=5.1,<5.2
+djangorestframework>=3.15,<4.0
+djangorestframework-simplejwt>=5.3,<6.0
+django-cors-headers>=4.3,<5.0
+django-filter>=24.0,<25.0
+
+# Database
+psycopg2-binary>=2.9,<3.0
+
+# DOCX generation
+python-docx>=1.1,<2.0
+
+# PDF report generation (YAML for template data)
+PyYAML>=6.0,<7.0
+
+# Environment variables
+python-decouple>=3.8,<4.0
+
+# Production server
+gunicorn>=22.0,<23.0
