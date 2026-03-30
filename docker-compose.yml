@@ -19,7 +19,11 @@ services:
 
   # ── Django Backend ──
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      args:
+        HTTP_PROXY: ${HTTP_PROXY:-}
+        HTTPS_PROXY: ${HTTPS_PROXY:-}
     command: bash /app/entrypoint.sh
     restart: unless-stopped
     ports:
@@ -44,13 +48,14 @@ services:
 
   # ── Vue.js Frontend ──
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      args:
+        HTTP_PROXY: ${HTTP_PROXY:-}
+        HTTPS_PROXY: ${HTTPS_PROXY:-}
     restart: unless-stopped
     ports:
       - "127.0.0.1:5173:5173"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
     environment:
       VITE_API_URL: ${VITE_API_URL:-/redvault/api/v1}
     depends_on:
@@ -61,6 +66,9 @@ services:
     image: nginx:alpine
     restart: unless-stopped
     entrypoint: /entrypoint.sh
+    environment:
+      HTTP_PROXY: ${HTTP_PROXY:-}
+      HTTPS_PROXY: ${HTTPS_PROXY:-}
     ports:
       - "443:443"
     volumes:

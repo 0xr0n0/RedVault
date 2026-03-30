@@ -135,6 +135,29 @@ These are set in the `.env` file at the project root. Docker Compose reads them 
 | `ALLOWED_HOSTS`        | No       | `localhost,127.0.0.1`            | Comma-separated hostnames the backend will accept requests from. Add your domain if deploying publicly. |
 | `CORS_ALLOWED_ORIGINS` | No       | `http://localhost:5173`          | Comma-separated URLs that the frontend runs on. Must match exactly (including port). |
 | `ENABLE_ADMIN`         | No       | `False`                          | Enables the Django admin panel at `/admin/`. Not needed for normal use. |
+| `HTTP_PROXY`           | No       | —                                | HTTP proxy URL for building behind a corporate firewall (e.g. `http://proxy.example.com:8080/`). |
+| `HTTPS_PROXY`          | No       | —                                | HTTPS proxy URL. If not set, falls back to `HTTP_PROXY` where applicable. |
+
+### Building Behind a Corporate Proxy
+
+If your server cannot reach the internet directly (e.g. behind a corporate firewall), add the proxy to your `.env` file:
+
+```env
+HTTP_PROXY=http://proxy.example.com:8080/
+HTTPS_PROXY=http://proxy.example.com:8080/
+```
+
+This is all you need. Docker Compose passes the proxy automatically to:
+
+- **`apt-get`** in the backend Dockerfile (installs system packages)
+- **`pip`** in the backend Dockerfile (installs Python dependencies)
+- **`curl`** in the backend Dockerfile (downloads Typst)
+- **`npm`** in the frontend Dockerfile (installs Node.js dependencies)
+- **`apk`** in the nginx container (installs OpenSSL for self-signed certificate generation)
+
+If your server has direct internet access, simply leave these variables out — everything works without them.
+
+> **Note:** The proxy is only used during the build phase and at first startup (for the nginx certificate). It is not baked into the final container images.
 
 ### Changing Ports
 

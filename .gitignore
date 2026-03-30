@@ -26,3 +26,6 @@ __pycache__/
 
 #Data
 data
+
+# Docker Compose override (local/server-specific config)
+docker-compose.override.yml
